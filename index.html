@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Walk Report</title>
+<style>
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto;
+    background: #f5f6f8;
+    overflow: hidden;
+  }
+  .container {
+    display: flex;
+    width: 600%;
+    height: 100vh;
+    transition: transform 0.35s ease;
+  }
+  .page {
+    width: 100vw;
+    height: 100vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+    padding: 16px;
+    background: #f5f6f8;
+  }
+  .header {
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+    margin-bottom: 12px;
+  }
+  .card {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  }
+  .card h3 {
+    margin: 0 0 8px;
+    font-size: 16px;
+  }
+  .card p {
+    margin: 6px 0;
+    line-height: 1.6;
+    font-size: 14px;
+    color: #333;
+  }
+  .tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 12px;
+    margin-left: 6px;
+  }
+  .good { background: #e6f7ec; color: #1e7f4d; }
+  .neutral { background: #fff4e5; color: #9a6a1f; }
+
+  .nav {
+    position: fixed;
+    bottom: 16px;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 0 16px;
+  }
+  .nav button {
+    background: #007aff;
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 10px 18px;
+    font-size: 14px;
+  }
+  .nav button:disabled {
+    background: #ccc;
+  }
+  img {
+    width: 100%;
+    border-radius: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div id="container" class="container">
+
+  <!-- Page 1 -->
+  <div class="page">
+    <div class="header">Walk Report · 第 1 页</div>
+    <img src="image1.jpg" alt="Page 1">
+  </div>
+
+  <!-- Page 2 -->
+  <div class="page">
+    <div class="header">Walk Report · 第 2 页</div>
+    <img src="image2.jpg" alt="Page 2">
+  </div>
+
+  <!-- Page 3 -->
+  <div class="page">
+    <div class="header">Walk Report · 第 3 页</div>
+    <img src="image3.jpg" alt="Page 3">
+  </div>
+
+  <!-- Page 4 -->
+  <div class="page">
+    <div class="header">Walk Report · 第 4 页</div>
+    <img src="image4.jpg" alt="Page 4">
+  </div>
+
+  <!-- Page 5 -->
+  <div class="page">
+    <div class="header">鞋垫使用前后效果评估</div>
+
+    <div class="card">
+      <h3>✅ 明显改善</h3>
+      <p>左右步态对称性达到 <strong>100%</strong>，站立期比例一致，说明承重分配已恢复平衡。</p>
+      <p>足部滚动轨迹对称、连续，内外翻角度处于理想区间，鞋垫对足底稳定和力线引导效果明确。</p>
+    </div>
+
+    <div class="card">
+      <h3>⚠️ 改善有限</h3>
+      <p>推进率（左 16%，右 12%）偏低，提示推进动力主要受髋部、躯干及神经控制影响。</p>
+      <p>行走速度 4.2 km/h，鞋垫提供了稳定基础，但无法直接决定行走快慢。</p>
+    </div>
+  </div>
+
+  <!-- Page 6 -->
+  <div class="page">
+    <div class="header">步态情况综合判断</div>
+
+    <div class="card">
+      <h3>步态稳定性 <span class="tag good">改善</span></h3>
+      <p>左右步长差异小，站立 / 摆动期对称，足部控制能力增强。</p>
+    </div>
+
+    <div class="card">
+      <h3>步态动力性 <span class="tag neutral">基本不变</span></h3>
+      <p>推进阶段比例与抬脚高度变化不明显，行走仍偏保守。</p>
+    </div>
+
+    <div class="card">
+      <h3>✅ 总体结论</h3>
+      <p>
+        使用鞋垫后，步态由「不稳定型」转变为
+        <strong>「稳定但动力偏保守型」</strong>。
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<div class="nav">
+  <button id="prev">上一页</button>
+  <button id="next">下一页</button>
+</div>
+
+<script>
+  let index = 0;
+  const container = document.getElementById("container");
+  const prev = document.getElementById("prev");
+  const next = document.getElementById("next");
+
+  function update() {
+    container.style.transform = `translateX(-${index * 100}vw)`;
+    prev.disabled = index === 0;
+    next.disabled = index === 5;
+  }
+
+  prev.onclick = () => { if (index > 0) index--; update(); };
+  next.onclick = () => { if (index < 5) index++; update(); };
+
+  // Swipe support
+  let startX = 0;
+  document.addEventListener("touchstart", e => startX = e.touches[0].clientX);
+  document.addEventListener("touchend", e => {
+    const diff = e.changedTouches[0].clientX - startX;
+    if (diff > 50 && index > 0) index--;
+    if (diff < -50 && index < 5) index++;
+    update();
+  });
+
+  update();
+</script>
+
+</body>
+</html>
